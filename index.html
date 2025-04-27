@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <base href="/convite-vi/" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
@@ -46,11 +45,15 @@
         overflow: hidden;
         animation: typing 4s steps(30, end),
           blink 1s step-end infinite alternate;
+        font-size: 24px;
+        margin: 0 10px;
       }
 
       .button-container {
         margin-top: 20px;
         display: none;
+        flex-direction: column;
+        gap: 10px;
       }
 
       @keyframes typing {
@@ -68,6 +71,33 @@
         }
         to {
           border-color: transparent;
+        }
+      }
+
+      /* Responsividade para telas menores */
+      @media (max-width: 768px) {
+        .typing {
+          font-size: 18px; /* Reduz o tamanho do texto */
+        }
+
+        button {
+          font-size: 16px; /* Reduz o tamanho dos botões */
+          padding: 8px 16px; /* Ajusta o espaçamento */
+        }
+
+        .button-container {
+          gap: 8px; /* Reduz o espaçamento entre os botões */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .typing {
+          font-size: 16px; /* Reduz ainda mais o tamanho do texto */
+        }
+
+        button {
+          font-size: 14px; /* Ajusta o tamanho dos botões para telas muito pequenas */
+          padding: 6px 12px;
         }
       }
     </style>
