@@ -1,131 +1,330 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap"
-      rel="stylesheet"
-    />
-    <title>Convite ❤️</title>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convite Especial para o meu amor ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     <style>
-      body {
-        background-color: black;
-        color: white;
-        font-family: "Roboto", sans-serif;
-        text-align: center;
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      button {
-        font-family: "Roboto", sans-serif;
-        background-color: white;
-        color: black;
-        border: none;
-        padding: 10px 20px;
-        font-size: 20px;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.6s ease;
-      }
-
-      button:hover {
-        background-color: gray;
-      }
-
-      .typing {
-        border-right: 2px solid white;
-        white-space: nowrap;
-        overflow: hidden;
-        animation: typing 4s steps(30, end),
-          blink 1s step-end infinite alternate;
-        font-size: 24px;
-        margin: 0 10px;
-      }
-
-      .button-container {
-        margin-top: 20px;
-        display: none;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      @keyframes typing {
-        from {
-          width: 0;
-        }
-        to {
-          width: 100%;
-        }
-      }
-
-      @keyframes blink {
-        from {
-          border-color: white;
-        }
-        to {
-          border-color: transparent;
-        }
-      }
-
-      /* Responsividade para telas menores */
-      @media (max-width: 768px) {
-        .typing {
-          font-size: 18px; /* Reduz o tamanho do texto */
+        :root {
+            --bg-color: #f0f9ff;
+            --text-color: #2d3436;
+            --accent: #ff7675;
         }
 
-        button {
-          font-size: 16px; /* Reduz o tamanho dos botões */
-          padding: 8px 16px; /* Ajusta o espaçamento */
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
         }
 
-        .button-container {
-          gap: 8px; /* Reduz o espaçamento entre os botões */
-        }
-      }
-
-      @media (max-width: 480px) {
-        .typing {
-          font-size: 16px; /* Reduz ainda mais o tamanho do texto */
+        /* ── INTRO com sticky ── */
+        #intro {
+            position: relative;
+            height: 220vh;
+            background: linear-gradient(180deg, #dff9fb 0%, #f0f9ff 60%);
         }
 
-        button {
-          font-size: 14px; /* Ajusta o tamanho dos botões para telas muito pequenas */
-          padding: 6px 12px;
+        #intro-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
         }
-      }
+
+        #duck-family {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            pointer-events: none;
+        }
+
+        .duck { line-height: 1; }
+        .mother { font-size: 4.5rem; }
+
+        .patito {
+            font-size: 2.5rem;
+            margin-top: -10px;
+            opacity: 0;
+            transform: scale(0.4);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        @keyframes waddle {
+            0%   { margin-left: 0; }
+            25%  { margin-left: 14px; }
+            75%  { margin-left: -14px; }
+            100% { margin-left: 0; }
+        }
+
+        .patito.visible {
+            opacity: 1;
+            transform: scale(1);
+            animation: waddle 1.3s ease-in-out infinite;
+        }
+        .patito.visible:nth-child(2) { animation-delay: 0.00s; }
+        .patito.visible:nth-child(3) { animation-delay: 0.20s; }
+        .patito.visible:nth-child(4) { animation-delay: 0.40s; }
+
+        #intro h1 {
+            font-family: 'Pacifico', cursive;
+            color: var(--accent);
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            margin: 0 0 10px;
+        }
+
+        #intro p {
+            font-size: clamp(1rem, 4vw, 1.15rem);
+            max-width: 480px;
+            margin: 0 0 24px;
+            padding: 0 8px;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            color: #95a5a6;
+            white-space: nowrap;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            40%       { transform: translateX(-50%) translateY(-8px); }
+            60%       { transform: translateX(-50%) translateY(-4px); }
+        }
+
+        /* ── SEÇÕES ── */
+        section.destination {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 16px;
+            text-align: center;
+        }
+
+        .destination-card {
+            background: white;
+            padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1.2rem, 4vw, 2rem);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+            max-width: 520px;
+            width: 92%;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .destination-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .destination-card h2 { margin-top: 0; font-size: clamp(1.3rem, 5vw, 1.6rem); }
+        .destination-card p  { font-size: clamp(0.95rem, 4vw, 1.1rem); }
+
+        /* ── FINAL ── */
+        #final {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 16px;
+        }
+
+        #final .destination-card {
+            max-width: 560px;
+        }
+
+        #final h1 {
+            font-family: 'Pacifico', cursive;
+            color: var(--accent);
+            font-size: clamp(1.8rem, 6vw, 2.2rem);
+            margin: 14px 0 28px;
+        }
+
+        /* ── BOTÕES ── */
+        .btn-wrap {
+            /* Container fixo onde os botões vivem */
+            position: relative;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: clamp(1rem, 4vw, 1.1rem);
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover { transform: scale(1.06); }
+
+        #btn-sim {
+            background-color: var(--accent);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255,118,117,0.35);
+            position: absolute;
+            left: 50%;
+            transform: translateX(calc(-100% - 8px));
+        }
+
+        #btn-sim:hover {
+            transform: translateX(calc(-100% - 8px)) scale(1.06);
+        }
+
+        #btn-nao {
+            background-color: #dfe6e9;
+            color: #636e72;
+            box-shadow: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(8px);
+            transition: left 0.15s ease, top 0.15s ease, transform 0.15s ease;
+        }
+
+        #btn-nao:hover { transform: translateX(8px) scale(1); }
     </style>
-  </head>
-  <body>
-    <h1 class="typing"></h1>
-    <div class="button-container">
-      <button onclick="window.location.href='sim.html'">Sim ❤️</button>
-      <button onclick="window.location.href='nao.html'">Não 😭</button>
+</head>
+<body>
+
+    <div id="intro">
+        <div id="intro-sticky">
+            <div id="duck-family">
+                <div class="duck mother">🦆</div>
+                <div class="duck patito" id="p1">🐥</div>
+                <div class="duck patito" id="p2">🐥</div>
+                <div class="duck patito" id="p3">🐥</div>
+            </div>
+            <h1>Oi, minha Leoazinha! 🦁😍</h1>
+            <p>Para comemorar um dois dias mais especiais da minha vida vim te fazer um convite especial...</p>
+            <button class="btn" style="background:var(--accent);color:white;box-shadow:0 4px 15px rgba(255,118,117,.35);"
+                onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth',block:'end'})">
+                Ver para onde vamos?
+            </button>
+            <div class="scroll-hint">Role para baixo 🦆</div>
+        </div>
     </div>
+
+    <section class="destination">
+        <div class="destination-card">
+            <h2>Nossa primeira parada 🧺</h2>
+            <p>Um lugar para aproveitarmos a natureza 🌳.</p>
+        </div>
+    </section>
+
+    <section class="destination">
+        <div class="destination-card">
+            <h2>Nossa segunda parada vai ser para enchermos a barriguinha 🍽️</h2>
+            <p>Almoçar em um lugarzinho diferente dessa vez 😊.</p>
+        </div>
+    </section>
+
+    <section class="destination">
+        <div class="destination-card">
+            <h2>Nossa terceira parada vai ser para contemplar obras 🖼️</h2>
+            <p>Vamos contemplar seriamente as obras no museu 🤣.</p>
+        </div>
+    </section>
+
+    <section class="destination">
+        <div class="destination-card">
+            <h2>Nossa penúltima parada vai ser para contemplar o pôr do sol</h2>
+            <p>Vamos contemplar mais um pouco da natureza 🌇.</p>
+        </div>
+    </section>
+
+    <section id="final">
+        <div class="destination-card">
+            <h2>Surpresa Final 🎁</h2>
+            <p>O destino final é um lugar muito especial.</p>
+            <h1>Você aceita?</h1>
+            <div class="btn-wrap">
+                <button class="btn" id="btn-sim" onclick="window.location.href='sim.html'">Sim ❤️</button>
+                <button class="btn" id="btn-nao">Não 😭</button>
+            </div>
+        </div>
+    </section>
+
     <script>
-      const text = "Vitória, gostaria de sair comigo dia 03/05?";
-      const typingElement = document.querySelector(".typing");
-      const buttonContainer = document.querySelector(".button-container");
+        // ── Patinhos aparecem cedo no scroll ──
+        const ducks = [
+            document.getElementById('p1'),
+            document.getElementById('p2'),
+            document.getElementById('p3'),
+        ];
+        const THRESHOLDS = [0.08, 0.18, 0.28];
+        const intro = document.getElementById('intro');
 
-      let i = 0;
-      function typeWriter() {
-        if (i < text.length) {
-          typingElement.textContent += text.charAt(i);
-          i++;
-          setTimeout(typeWriter, 30);
-        } else {
-          typingElement.style.borderRight = "none";
-          buttonContainer.style.display = "block";
+        function handleScroll() {
+            const frac = window.scrollY / intro.offsetHeight;
+            ducks.forEach((d, i) => {
+                d.classList.toggle('visible', frac >= THRESHOLDS[i]);
+            });
         }
-      }
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
 
-      typeWriter();
+        // ── Botão "Não" foge ──
+        const btnNao = document.getElementById('btn-nao');
+        const wrap   = document.querySelector('.btn-wrap');
+
+        function escapar(e) {
+            if (e.cancelable) e.preventDefault();
+            // Foge pra um lado aleatório dentro do card
+            const card = document.querySelector('#final .destination-card');
+            const cRect = card.getBoundingClientRect();
+            const bW = btnNao.offsetWidth;
+            const bH = btnNao.offsetHeight;
+            const pad = 16;
+
+            // posição relativa ao card
+            const maxX = card.offsetWidth  - bW - pad;
+            const maxY = card.offsetHeight - bH - pad;
+            const newX = pad + Math.random() * (maxX - pad);
+            const newY = pad + Math.random() * (maxY - pad);
+
+            btnNao.style.position = 'absolute';
+            btnNao.style.left = newX + 'px';
+            btnNao.style.top  = newY + 'px';
+            btnNao.style.transform = 'none';
+
+            // muda o card pra relative se ainda não for
+            card.style.position = 'relative';
+            card.style.minHeight = Math.max(card.offsetHeight, newY + bH + pad) + 'px';
+            card.appendChild(btnNao);
+        }
+
+        btnNao.addEventListener('mouseenter', escapar);
+        btnNao.addEventListener('touchstart', escapar, { passive: false });
+
+        // ── Revelar cards ao rolar ──
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.destination-card').forEach(c => observer.observe(c));
     </script>
-  </body>
+</body>
 </html>
