@@ -159,12 +159,11 @@
 
         /* ── BOTÕES ── */
         .btn-wrap {
-            /* Container fixo onde os botões vivem */
-            position: relative;
-            height: 56px;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 12px;
+            height: 56px;
         }
 
         .btn {
@@ -175,36 +174,26 @@
             font-family: 'Quicksand', sans-serif;
             font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s;
             white-space: nowrap;
+            transition: transform 0.2s;
         }
-
-        .btn:hover { transform: scale(1.06); }
 
         #btn-sim {
             background-color: var(--accent);
             color: white;
             box-shadow: 0 4px 15px rgba(255,118,117,0.35);
-            position: absolute;
-            left: 50%;
-            transform: translateX(calc(-100% - 8px));
         }
 
-        #btn-sim:hover {
-            transform: translateX(calc(-100% - 8px)) scale(1.06);
-        }
+        #btn-sim:hover { transform: scale(1.06); }
 
         #btn-nao {
             background-color: #dfe6e9;
             color: #636e72;
-            box-shadow: none;
-            position: absolute;
-            left: 50%;
-            transform: translateX(8px);
-            transition: left 0.15s ease, top 0.15s ease, transform 0.15s ease;
         }
 
-        #btn-nao:hover { transform: translateX(8px) scale(1); }
+        #btn-nao.fugindo {
+            transition: left 0.12s ease, top 0.12s ease;
+        }
     </style>
 </head>
 <body>
@@ -217,11 +206,12 @@
                 <div class="duck patito" id="p2">🐥</div>
                 <div class="duck patito" id="p3">🐥</div>
             </div>
-            <h1>Oi, minha Leoazinha! 🦁😍</h1>
-            <p>Para comemorar um dois dias mais especiais da minha vida vim te fazer um convite especial...</p>
-            <button class="btn" style="background:var(--accent);color:white;box-shadow:0 4px 15px rgba(255,118,117,.35);"
-                onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth',block:'end'})">
-                Ver para onde vamos?
+            <h1>Feliz 1 ano meu amooor!!! 💐❤️</h1>
+            <p>Para comemorar um dos dias mais especiais da minha vida vim te fazer um convite especial...</p>
+
+            <button class="btn" id="btn-comecar"
+                style="background:var(--accent);color:white;box-shadow:0 4px 15px rgba(255,118,117,.35);">
+                Ver para onde vamos? 🗺️
             </button>
             <div class="scroll-hint">Role para baixo 🦆</div>
         </div>
@@ -243,6 +233,13 @@
 
     <section class="destination">
         <div class="destination-card">
+            <h2>Nossa terceira parada vai ser para enchermos a barriguinha um pouco mais 🍫</h2>
+            <p>Tomaremos um café em um lugar mágico 🧙‍♂️☕.</p>
+        </div>
+    </section>
+
+    <section class="destination">
+        <div class="destination-card">
             <h2>Nossa terceira parada vai ser para contemplar obras 🖼️</h2>
             <p>Vamos contemplar seriamente as obras no museu 🤣.</p>
         </div>
@@ -252,6 +249,13 @@
         <div class="destination-card">
             <h2>Nossa penúltima parada vai ser para contemplar o pôr do sol</h2>
             <p>Vamos contemplar mais um pouco da natureza 🌇.</p>
+        </div>
+    </section>
+
+    <section class="destination">
+        <div class="destination-card">
+            <h2>Nossa última parada vai ser para jantarmos em um lugar especial</h2>
+            <p>Vamos jantar em um lugar muito charmoso 🕯️.</p>
         </div>
     </section>
 
@@ -268,58 +272,83 @@
     </section>
 
     <script>
-        // ── Patinhos aparecem cedo no scroll ──
+        document.getElementById('btn-comecar').addEventListener('click', function () {
+            const introEl = document.getElementById('intro');
+            const target = introEl.offsetTop + introEl.offsetHeight;
+            window.scrollTo({ top: target, behavior: 'smooth' });
+        });
+
         const ducks = [
             document.getElementById('p1'),
             document.getElementById('p2'),
             document.getElementById('p3'),
         ];
-        const THRESHOLDS = [0.08, 0.18, 0.28];
+        // Frações da zona de scroll: 15%, 30%, 50%
+        const FRACS = [0.15, 0.30, 0.50];
         const intro = document.getElementById('intro');
 
+        function getThresholds() {
+            const scrollZone = intro.offsetHeight - window.innerHeight;
+            return FRACS.map(f => f * scrollZone);
+        }
+
         function handleScroll() {
-            const frac = window.scrollY / intro.offsetHeight;
+            const scrolledIntoIntro = window.scrollY - intro.offsetTop;
+            const thresholds = getThresholds();
             ducks.forEach((d, i) => {
-                d.classList.toggle('visible', frac >= THRESHOLDS[i]);
+                d.classList.toggle('visible', scrolledIntoIntro >= thresholds[i]);
             });
         }
         window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', handleScroll, { passive: true });
         handleScroll();
 
-        // ── Botão "Não" foge ──
         const btnNao = document.getElementById('btn-nao');
-        const wrap   = document.querySelector('.btn-wrap');
+        let jaDentroDoFixed = false;
 
         function escapar(e) {
             if (e.cancelable) e.preventDefault();
-            // Foge pra um lado aleatório dentro do card
-            const card = document.querySelector('#final .destination-card');
-            const cRect = card.getBoundingClientRect();
+
             const bW = btnNao.offsetWidth;
             const bH = btnNao.offsetHeight;
-            const pad = 16;
+            const pad = 12;
 
-            // posição relativa ao card
-            const maxX = card.offsetWidth  - bW - pad;
-            const maxY = card.offsetHeight - bH - pad;
-            const newX = pad + Math.random() * (maxX - pad);
-            const newY = pad + Math.random() * (maxY - pad);
+            // Área disponível na viewport
+            const maxX = window.innerWidth  - bW - pad;
+            const maxY = window.innerHeight - bH - pad;
 
-            btnNao.style.position = 'absolute';
+            // Posição aleatória dentro da viewport, longe da posição atual
+            let newX, newY, tentativas = 0;
+            const curX = parseFloat(btnNao.style.left) || (window.innerWidth / 2);
+            const curY = parseFloat(btnNao.style.top)  || (window.innerHeight / 2);
+
+            do {
+                newX = pad + Math.random() * (maxX - pad);
+                newY = pad + Math.random() * (maxY - pad);
+                tentativas++;
+            } while (tentativas < 10 && Math.hypot(newX - curX, newY - curY) < 120);
+
+            if (!jaDentroDoFixed) {
+                const rect = btnNao.getBoundingClientRect();
+                btnNao.style.left = rect.left + 'px';
+                btnNao.style.top  = rect.top  + 'px';
+                btnNao.style.width = bW + 'px';
+                btnNao.style.position = 'fixed';
+                btnNao.style.margin = '0';
+                btnNao.classList.add('fugindo');
+                document.body.appendChild(btnNao);
+                jaDentroDoFixed = true;
+                btnNao.getBoundingClientRect();
+            }
+
             btnNao.style.left = newX + 'px';
             btnNao.style.top  = newY + 'px';
-            btnNao.style.transform = 'none';
-
-            // muda o card pra relative se ainda não for
-            card.style.position = 'relative';
-            card.style.minHeight = Math.max(card.offsetHeight, newY + bH + pad) + 'px';
-            card.appendChild(btnNao);
         }
 
         btnNao.addEventListener('mouseenter', escapar);
         btnNao.addEventListener('touchstart', escapar, { passive: false });
+        btnNao.addEventListener('touchmove',  escapar, { passive: false });
 
-        // ── Revelar cards ao rolar ──
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
         }, { threshold: 0.15 });

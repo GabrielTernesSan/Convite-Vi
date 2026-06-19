@@ -25,8 +25,29 @@
             justify-content: center;
             padding: 40px 16px;
             text-align: center;
+            overflow: hidden;
+            position: relative;
         }
 
+        /* ── Lágrimas caindo ── */
+        .lagrima {
+            position: fixed;
+            top: -40px;
+            font-size: 1.4rem;
+            pointer-events: none;
+            animation: cair linear infinite;
+            opacity: 0.7;
+            z-index: 0;
+            user-select: none;
+        }
+
+        @keyframes cair {
+            0%   { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+            90%  { opacity: 0.7; }
+            100% { transform: translateY(110vh) rotate(20deg); opacity: 0; }
+        }
+
+        /* ── Card ── */
         .card {
             background: white;
             border-radius: 20px;
@@ -35,6 +56,8 @@
             max-width: 420px;
             width: 92%;
             animation: fadeIn 0.6s ease;
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes fadeIn {
@@ -42,12 +65,49 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
+        /* ── Patinhos chorando ── */
+        .patos-tristes {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+            letter-spacing: 6px;
+            animation: balanco 2s ease-in-out infinite;
+        }
+
+        @keyframes balanco {
+            0%, 100% { transform: translateX(0); }
+            25%       { transform: translateX(-6px); }
+            75%       { transform: translateX(6px); }
+        }
+
+        /* ── GIF com fallback ── */
+        .gif-wrap {
+            width: 100%;
+            max-width: 260px;
+            margin: 0 auto 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #ffeaea;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .gif {
             width: 100%;
-            max-width: 280px;
+            display: block;
             border-radius: 12px;
-            margin-bottom: 24px;
         }
+
+        /* Fallback: emoji grande quando GIF não carrega */
+        .gif-fallback {
+            display: none;
+            font-size: 4rem;
+            padding: 16px;
+        }
+
+        .gif-wrap.gif-erro .gif { display: none; }
+        .gif-wrap.gif-erro .gif-fallback { display: block; }
 
         h1 {
             font-family: 'Pacifico', cursive;
@@ -81,11 +141,56 @@
     </style>
 </head>
 <body>
+
+    <!-- Lágrimas geradas por JS -->
+
     <div class="card">
-        <img class="gif" src="https://pa1.aminoapps.com/6851/21709492b8dbad4813e7fa07211ce0d8db5bd842_hq.gif" alt="Pato triste">
+        <div class="patos-tristes">🐥😢🐥😢🐥</div>
+
+        <div class="gif-wrap" id="gif-wrap">
+            <img class="gif" id="gif-pato"
+                src="https://pa1.aminoapps.com/6851/21709492b8dbad4813e7fa07211ce0d8db5bd842_hq.gif"
+                alt="Pato triste">
+            <span class="gif-fallback" aria-hidden="true">🦆💔</span>
+        </div>
+
         <h1>Não? 😭</h1>
-        <p>Tá bom... mas os patinhos ficaram muito tristes.<br>Tem certeza?</p>
+        <p>Tá bom... mas os patinhos ficaram muito tristes.<br>Tem certeza mesmo?</p>
         <button class="btn" onclick="window.location.href='index.html'">Pensei melhor 🥹</button>
     </div>
+
+    <script>
+        // ── FIX: fallback do GIF ──
+        const gifEl   = document.getElementById('gif-pato');
+        const gifWrap = document.getElementById('gif-wrap');
+
+        gifEl.addEventListener('error', function () {
+            gifWrap.classList.add('gif-erro');
+        });
+
+        // ── Lágrimas caindo pela tela ──
+        const EMOJIS   = ['💧', '😢', '💦', '😭'];
+        const QTD      = 18;
+
+        for (let i = 0; i < QTD; i++) {
+            const el = document.createElement('span');
+            el.classList.add('lagrima');
+            el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+
+            // Posição horizontal aleatória
+            el.style.left = (Math.random() * 100) + 'vw';
+
+            // Tamanho ligeiramente variado
+            el.style.fontSize = (1 + Math.random() * 0.8) + 'rem';
+
+            // Duração e delay aleatórios para não ficarem síncronos
+            const dur   = 3 + Math.random() * 4;
+            const delay = -(Math.random() * dur); // delay negativo = já está caindo no load
+            el.style.animationDuration = dur + 's';
+            el.style.animationDelay    = delay + 's';
+
+            document.body.appendChild(el);
+        }
+    </script>
 </body>
 </html>

@@ -54,12 +54,36 @@
             border-radius: 20px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.07);
             overflow: hidden;
+            /* FIX: opacity/transform só são aplicados via JS após checar visibilidade,
+               evitando que cards já visíveis no carregamento fiquem ocultos */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* FIX: classe que prepara o card para animar — só adicionada se card
+           não estiver visível no carregamento inicial */
+        .card.vai-animar {
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        .card.visible { opacity: 1; transform: translateY(0); }
+        .card.vai-animar.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Fallback de imagem ── */
+        .card-img-wrap {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            background-color: #ffeaea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
 
         .card-img {
             width: 100%;
@@ -67,6 +91,11 @@
             object-fit: cover;
             display: block;
         }
+
+        /* Esconde o emoji de fallback quando a imagem carrega */
+        .card-img-wrap .fallback-emoji { display: none; }
+        .card-img-wrap.img-erro .card-img { display: none; }
+        .card-img-wrap.img-erro .fallback-emoji { display: block; }
 
         .card-body {
             padding: 16px;
@@ -125,53 +154,126 @@
     <p class="subtitle">Preparei tudo com muito carinho pra você 🦆💖</p>
 
     <div class="cards">
+
         <div class="card">
-            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/6/62/Foto_Arco_do_triunfo_Parque_Farroupilha_%28cropped%29.jpg" alt="Parque Redenção">
+            <div class="card-img-wrap">
+                <img class="card-img"
+                    src="https://upload.wikimedia.org/wikipedia/commons/6/62/Foto_Arco_do_triunfo_Parque_Farroupilha_%28cropped%29.jpg"
+                    alt="Parque Redenção">
+                <span class="fallback-emoji" aria-hidden="true">🌳</span>
+            </div>
             <div class="card-body">
                 <h3>Parque Redenção</h3>
                 <p class="horario">10:00 – 12:00</p>
-                <a class="btn-loc" href="https://g.co/kgs/vppKCGx" target="_blank">📍 Ver localização</a>
+                <a class="btn-loc" href="https://g.co/kgs/vppKCGx" target="_blank" rel="noopener">📍 Ver localização</a>
             </div>
         </div>
 
         <div class="card">
-            <img class="card-img" src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1d/c1/2e/f7/caption.jpg?w=900&h=500&s=1" alt="Giardino Mediterrâneo">
+            <div class="card-img-wrap">
+                <img class="card-img"
+                    src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1d/c1/2e/f7/caption.jpg?w=900&h=500&s=1"
+                    alt="Giardino Mediterrâneo">
+                <span class="fallback-emoji" aria-hidden="true">🍝</span>
+            </div>
             <div class="card-body">
-                <h3>Giardino Mediterrâneo</h3>
+                <h3>Almoço</h3>
                 <p class="horario">12:30 – 13:30</p>
-                <a class="btn-loc" href="https://maps.app.goo.gl/fgVRDW4tnFe9P1cN6" target="_blank">📍 Ver localização</a>
             </div>
         </div>
 
         <div class="card">
-            <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/FundacaoIbereCamargo_%28cropped%29.jpg/330px-FundacaoIbereCamargo_%28cropped%29.jpg" alt="Museu Iberê Camargo">
+            <div class="card-img-wrap">
+                <img class="card-img"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmtFKn0IUx1qjCGVIhsqzhLD6C0pwVphLzhAyxpgtj1Q&s=10"
+                    alt="Caldeirão Furado">
+                <span class="fallback-emoji" aria-hidden="true">🧙‍♂️</span>
+            </div>
+            <div class="card-body">
+                <h3>Caldeirão Furado</h3>
+                <p class="horario">14:00 – 15:00</p>
+                <a class="btn-loc" href="https://maps.app.goo.gl/crXUR5oonTurDMeV8" target="_blank" rel="noopener">📍 Ver localização</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-img-wrap">
+                <img class="card-img"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/FundacaoIbereCamargo_%28cropped%29.jpg/330px-FundacaoIbereCamargo_%28cropped%29.jpg"
+                    alt="Museu Iberê Camargo">
+                <span class="fallback-emoji" aria-hidden="true">🖼️</span>
+            </div>
             <div class="card-body">
                 <h3>Museu Iberê Camargo</h3>
                 <p class="horario">14:00 – 16:30</p>
-                <a class="btn-loc" href="https://g.co/kgs/b53Dcy3" target="_blank">📍 Ver localização</a>
+                <a class="btn-loc" href="https://g.co/kgs/b53Dcy3" target="_blank" rel="noopener">📍 Ver localização</a>
             </div>
         </div>
 
         <div class="card">
-            <img class="card-img" src="https://www.correiodopovo.com.br/image/contentid/policy:1.929030:1679261503/image.jpeg?f=2x1&q=0.9&w=768&$p$f$q$w=236b46a" alt="Pontal">
+            <div class="card-img-wrap">
+                <img class="card-img"
+                    src="https://www.correiodopovo.com.br/image/contentid/policy:1.929030:1679261503/image.jpeg?f=2x1&q=0.9&w=768&$p$f$q$w=236b46a"
+                    alt="Pontal">
+                <span class="fallback-emoji" aria-hidden="true">🌇</span>
+            </div>
             <div class="card-body">
                 <h3>Pontal</h3>
                 <p class="horario">17:00 – 18:00</p>
-                <a class="btn-loc" href="https://g.co/kgs/9v1x5D" target="_blank">📍 Ver localização</a>
+                <a class="btn-loc" href="https://g.co/kgs/9v1x5D" target="_blank" rel="noopener">📍 Ver localização</a>
             </div>
         </div>
+
+        <div class="card">
+            <div class="card-img-wrap">
+                <img class="card-img"
+                    src="https://img.magnific.com/vetores-premium/moderno-modelo-de-ponto-de-interrogacao-para-o-vetor-de-ideia-ou-mensagem-em-um-fundo-branco-isolado-11_1119689-5070.jpg?semt=ais_hybrid&w=740&q=80"
+                    alt="Pontal">
+                <span class="fallback-emoji" aria-hidden="true">❓</span>
+            </div>
+            <div class="card-body">
+                <h3>Surpresa</h3>
+                <p class="horario">19:00 – 20:00</p>
+            </div>
+        </div>
+
     </div>
 
     <button class="btn-back" onclick="window.location.href='index.html'">Não gostei 😭</button>
 
     <script>
+        // ── FIX: fallback de imagem ──
+        document.querySelectorAll('.card-img').forEach(img => {
+            img.addEventListener('error', function () {
+                this.closest('.card-img-wrap').classList.add('img-erro');
+            });
+        });
+
+        // ── FIX: animação só em cards fora da viewport no carregamento ──
+        // Aplica 'vai-animar' apenas em cards que ainda não estão visíveis,
+        // evitando que cards acima da dobra fiquem presos em opacity:0.
+        const cards = document.querySelectorAll('.card');
+
         const observer = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.card').forEach((c, i) => {
-            c.style.transitionDelay = (i * 0.1) + 's';
-            observer.observe(c);
+        cards.forEach((card, i) => {
+            const rect = card.getBoundingClientRect();
+            const visibleNow = rect.top < window.innerHeight && rect.bottom > 0;
+
+            if (!visibleNow) {
+                // Só anima quem está fora da tela, com delay escalonado
+                card.classList.add('vai-animar');
+                card.style.transitionDelay = (i * 0.1) + 's';
+                observer.observe(card);
+            }
+            // Cards já visíveis ficam com opacity:1 e aparecem imediatamente
         });
     </script>
 </body>
